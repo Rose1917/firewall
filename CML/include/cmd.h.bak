@@ -1,0 +1,103 @@
+#ifndef CMD_H
+#define CMD_H
+#include "rule.h"
+#include "chain.h"
+
+typedef enum rule_cmd_family_t{
+	APPEND,
+	REMOVE,
+	MODIFY,
+	INSERT,
+	INIT_ACTION
+}rule_cmd_family_t;
+
+typedef enum cmd_family_t{
+	RULE_OP,
+	CHAIN_OP,
+	STATUS_SWITCH,
+	STATUS_INFO,
+	INIT_FAMILY
+}cmd_family_t;
+
+typedef struct rule_cmd_append_t{
+	chain_family chain;
+	rule_t rule;
+}rule_cmd_add_t;
+
+typedef struct rule_cmd_remove_t{
+	chain_family chain;
+	index_t index;
+}rule_cmd_remove_t;
+
+typedef struct rule_cmd_modify_t{
+	chain_family chain;
+	index_t index;
+	rule_t rule;
+}rule_cmd_modify_t;
+
+typedef struct rule_cmd_insert_t{
+	chain_t chain;
+	index_t index;
+	rule_t rule;
+}rule_cmd_insert_t;
+
+typedef struct rule_cmd_t{
+	rule_cmd_family_t rule_family;
+	union rule_cmd{
+		rule_cmd_append_t append_rule;
+		rule_cmd_remove_t remove_rule;
+		rule_cmd_modify_t modify_rule;
+		rule_cmd_insert_t insert_rule;
+	};
+}rule_cmd_t;
+
+typedef enum switch_status_t{
+	START,
+	STOP,
+	ENABLE,
+	DISABLE,
+	INIT_STATUS
+}switch_status_t;
+
+typedef enum log_t{
+	STATUS_LOG,//check the status (if activated or enabled
+	FILTER_LOG,//check the firewall filter log
+	LIST_RULE//list all 
+}log_t;
+
+typedef struct policy_chain_t{
+	chain_family family;
+	policy_t policy;
+}policy_chain_t;
+
+typedef struct clear_chain_t{
+	chain_family family;
+}clear_chain_t;
+
+typedef enum chain_cmd_family_t{
+	SET_POLICY,
+	CLEAR_CHAIN
+}chain_cmd_family_t;
+
+typedef struct chain_cmd_t{
+	chain_cmd_family_t chain_cmd_family;
+	//argument
+	union chain_cmd{
+		policy_chain_t policy_chain;
+		clear_chain_t clear_chain;
+	};
+}chain_cmd_t;
+
+
+typedef struct cmd_t{
+	cmd_family_t family;
+	union {
+		rule_cmd_t rule_cmd;//is valid when the family is rule_op
+		switch_status_t switch_status;//is valid when the family is status_switch
+		log_t log;//is valid when the family is status_info
+		chain_cmd_t chain_cmd;//
+	}cmd_body;
+}cmd_t,*cmd_ptr_t;
+
+
+#endif

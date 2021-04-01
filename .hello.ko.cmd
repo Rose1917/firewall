@@ -1,0 +1,1 @@
+cmd_/home/march1917/Projects/firewall/hello.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id  -T ./scripts/module-common.lds -o /home/march1917/Projects/firewall/hello.ko /home/march1917/Projects/firewall/hello.o /home/march1917/Projects/firewall/hello.mod.o;  true

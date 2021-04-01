@@ -1,0 +1,1 @@
+cmd_/home/march1917/recent/LKM/firewall.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id  -T ./scripts/module-common.lds -o /home/march1917/recent/LKM/firewall.ko /home/march1917/recent/LKM/firewall.o /home/march1917/recent/LKM/firewall.mod.o;  true
