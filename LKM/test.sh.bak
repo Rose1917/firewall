@@ -1,0 +1,30 @@
+#Test Group 1:start stop enable disable and status
+firewall start
+firewall status
+firewall stop
+firewall status
+firewall enable
+firewall status
+firewall disable
+firewall status
+firewall start
+
+#Test Group 2:append/insert/remove/modify/flush/list
+firewall append --chain INCOME --dport 23 --target DROP
+firewall list
+firewall insert --index 1 --chain INCOME --dport 25 --dip 192.168.0.119 --target DROP
+firewall list
+firewall remove --index 1 --chain INCOME 
+firewall list
+firewall append --chain INCOME --dport 25 --target DROP
+firewall list
+firewall modify --index 1 --chain INCOME --dport 26 --target DROP
+firewall list
+firewall flush --chain INCOME
+firewall list
+
+#Test Group3:service
+firewall append --chain INCOME --service SSH --target DROP
+firewall list
+
+#Test Group4: 

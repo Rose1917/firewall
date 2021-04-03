@@ -1,0 +1,88 @@
+			                     firewall help page
+		-----------------------------------------------------------------------------------
+		SYNTAX:
+			firwall <command> [option <option arguments>]
+		-----------------------------------------------------------------------------------
+		COMMAND LIST:
+			general control commands:
+				start  :start the firwall
+				stop   :stop the firewall
+				enable :start the firewall when the os inits
+				disable:disable the firewall when the the os inits
+			
+			rule control commands
+				append :append a rule to the end of the chain
+				insert :insert a rule to a specific chain at specific position
+				remove :remove a rule at the specific position of specific chain 
+				modify :modify a rule at the specific position of specific chain
+				list   :list all the rules of all the chains
+			
+			chain control commands
+				flush  :remove all the chains's rules
+				policy :change the default policy of a specific chains
+			others
+				help   :print this page
+		-----------------------------------------------------------------------------------	
+		OPTION AND OPTION ARGUMENTS
+			--chain
+				to specify the chain id,the options are INCOME/OUTCOME/FORWARD.just
+				as the name suggest,the rules in the chains will be applied to the 
+				income packets,outcome packets and forward packets respectively.
+
+			--sip
+				the abbreviation of source ip.the ip's format is '192.168.0.1'.
+
+			--dip
+				destination ip.the ip format is '192.168.0.1'.
+
+			--sport
+				the abbreviation of source port.the port is non-negative.
+
+			--dport
+				destination port
+
+			--proto
+				the abbreviation of protocol,it can be TCP or UDP.
+
+			--service
+				the service type you want to specify.this is a convient way to make
+				rule without the bother to remember the port and transmission proto
+				col,it can be SSH/DNS/HTTP/HTTPS/
+
+			--target
+				the action to make when a rule is matched.it can be DROP/ACCEPT	
+
+			--alarm
+				to decide if it will ring when a rule is matched.it can be ON/OFF(OF
+				-F by default)
+
+			--index
+				to specify the index in a chain.
+		-----------------------------------------------------------------------------------	
+		THE COMMANDS AND OPTION TABLE
+			
+
+			this table shows the relationship between the command and the arguments.
+				1)REQUIRE :command needs argument
+				2)OPTIONAL:the argument is optional.
+				3)NO_ARGU :the command does not need the argument.
+				
+				SIP	  DIP	   SPORT	 DPORT	 PROTO	 SERVICE   ALARM     CHAIN     TARGET	 CHAIN_INDEX
+			START	NO_ARGU,  NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU
+			STOP	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU
+			ENABLE	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU
+			DISABLE	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARG
+			APPEND  OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,REQUIRE,REQUIRE,NO_ARGU
+			REMOVE	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  REQUIRE,   NO_ARGU, REQUIRE
+			INSERT  OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,REQUIRE,REQUIRE,REQUIRE
+			MODIFY  OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,REQUIRE,REQUIRE,REQUIRE
+			FLUSH	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  REQUIRE,   NO_ARGU, NO_ARGU
+			POLICY	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  REQUIRE,   REQUIRE, NO_ARGU
+			LISTR	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU
+			LISTS	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU
+			LISTF	NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU
+		-----------------------------------------------------------------------------------	
+		AUTHOR && COPYRIGHT
+			MARCH1917
+			2021.4.2
+			GPL copyright reserved
