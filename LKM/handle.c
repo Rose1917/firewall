@@ -15,7 +15,6 @@
 #include <linux/netfilter_ipv4.h>
 #include <linux/string.h>
 #include <asm/uaccess.h>
-extern char log_to_read_buffer[LOG_BUFFER_SIZE];
 extern switch_t firewall_switch;
 extern switch_t firewall_enable;
 extern chain_ptr_t income_chain,outcome_chain,forward_chain;
@@ -23,8 +22,6 @@ extern chain_ptr_t income_chain,outcome_chain,forward_chain;
 static char to_read_buffer[BUFFER_SIZE];
 
 //log buffer
-extern char log_to_read_buffer[LOG_BUFFER_SIZE];
-extern char log_tmp_buffer[LOG_TMP_SIZE];
 
 ssize_t handle_read(struct file *file,char __user *ubuf,size_t count,loff_t *ppos){
 	if(*ppos==0){
@@ -48,7 +45,6 @@ ssize_t handle_write(struct file *file,const char __user *ubuf,size_t count,loff
 	
 	//map the command to handler
 	memset(to_read_buffer,'\0',sizeof(to_read_buffer));	//clean the read buffer
-	memset(log_to_read_buffer,'\0',sizeof(log_to_read_buffer));
 	
 	if(firewall_switch == OFF&&cmd.id!=START){
 		strcat(to_read_buffer,"the firewall is not active");
@@ -74,7 +70,6 @@ void print_cmd_info(){
 }
 HANDLE_FUNCTION(start){
 	firewall_switch = ON;
-	memset(log_to_read_buffer,0,sizeof(log_to_read_buffer));
 	register_hookfunctions();
 	strcat(to_read_buffer,"started the firewall succesfully");
 	return ;

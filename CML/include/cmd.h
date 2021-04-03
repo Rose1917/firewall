@@ -2,7 +2,7 @@
 #define CMD_H
 #include "service.h"
 #include "cmd.h"
-#define COMMAND_COUNT 13
+#define COMMAND_COUNT 14
 #define ARGUMENT_COUNT 10
 //defination of the permission of command to arguments
 #define REQUIRE 1
@@ -35,7 +35,8 @@ typedef enum command_id{
 	//info operations
 	LIST_RULE,//list all the rules
 	STATUS_CHECK,//if activated
-	FILTER_LOG//show the filter log
+	FILTER_LOG,//show the filter log
+	HELP,
 }command_id;
 
 //all the argument possibilities
@@ -73,6 +74,7 @@ static permission permission_table[COMMAND_COUNT][ARGUMENT_COUNT]={
 /*LISTR*/	{NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU},
 /*LISTS*/	{NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU},
 /*LISTF*/	{NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,NO_ARGU,  NO_ARGU,  NO_ARGU,   NO_ARGU, NO_ARGU},
+/*HELP*/	{OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL,OPTIONAL}
 };
 
 typedef struct name_id_map{
@@ -95,7 +97,8 @@ static name_id_map name_id_tables[]={
 	{"policy",SET_CHAIN_POLICY},
 	{"list",LIST_RULE},
 	{"status",STATUS_CHECK},
-	{"log",FILTER_LOG}
+	{"log",FILTER_LOG},
+	{"help",HELP}
 };
 
 //defination of arguments table:

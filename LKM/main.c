@@ -5,6 +5,7 @@
 #include "include/proto.h"
 #include "include/log.h"
 #include "include/cmd.h"
+#include "include/log.h"
 
 
 //the pro file to communicate the user-space
@@ -34,8 +35,7 @@ extern ssize_t handle_write(struct file *file,const char __user *ubuf,size_t cou
 */
 
 //log buffer
-extern char log_tmp_buffer[LOG_TMP_SIZE];
-extern char log_to_read_buffer[LOG_BUFFER_SIZE];
+log_vector_t log_vector;
 
 unsigned int income_filter_hookfunc(void* priv,struct sk_buff *skb,const struct nf_hook_state *state){
 	rule_ptr_t tmp_rule=income_chain->head->next;
@@ -115,6 +115,13 @@ int init_firewall(void){
 	//prepare the proc file to receive and send message
 	init_proc();
 
+	init_log_vector(&log_vector);
+
+	//test
+	
+	
+	//firewall_log(&log_vector,DEBUG,"test string",strlen("test string"));
+
 	return 0;
 }
 
@@ -168,7 +175,6 @@ void init_proc(void){
 	}
 
 	log_proc_entry=proc_create("firewall_log",0660,NULL,&myops_1);
-	memset(log_to_read_buffer,0,sizeof(log_to_read_buffer));
 	if(log_proc_entry == NULL){
 		printk(KERN_INFO "an error occurred while creating the log proc file");
 		return 1;
@@ -192,6 +198,7 @@ target_t check_rule(struct sk_buff* skb,rule_ptr_t rule){
 		//source port restriction
 		unsigned int s_port = ntohs(tcp_header->source);
 		if(s_port!=rule->rule_behaviour.sport&&s_port!=rule->rule_behaviour.sport)return INIT_TARGET;
+		firewall_flog(&log_vector,INFO,"rule matching info:a packet with source port %d ",s_port);
 	}
 
 	//destination port
@@ -202,43 +209,38 @@ target_t check_rule(struct sk_buff* skb,rule_ptr_t rule){
 		//destination port restriction
 		unsigned int d_port = ntohs(tcp_header->dest);
 		if(d_port!=rule->rule_behaviour.dport&&d_port!=rule->rule_behaviour.dport)return INIT_TARGET;
+		firewall_flog(&log_vector,INFO,"rule matching info:a packet with destination port %d ",d_port);
 	}
 
 
 	//source ip addr
 	if(if_init_ip(rule->rule_behaviour.sip)){
-		printk("sip not set");
 		//match continue
 	}
 	else{
 		unsigned char* rule_saddr=(unsigned char *)rule->rule_behaviour.sip;
 		unsigned char* target_saddr = (unsigned char*)&ip_header->saddr;
-		printk("check rule function:the rule addr:%x,the target daddr is %x",rule_saddr,target_saddr);
-		printk("the rule ip addr:%pI4",rule_saddr);
-		printk("the target ip addr:%pI4",target_saddr);
 		if(memcmp(rule_saddr,target_saddr,IP_LENGTH))return INIT_TARGET;
+		firewall_flog(&log_vector,INFO,"rule matching info:a packet with source ip address %pI4 ",rule_saddr);
+
 	}
 
 
 	//destination ip addr	
 	if(if_init_ip(rule->rule_behaviour.dip)){
 		//match continue
-		printk("dip not set");
 
 	}
 	else{
 		unsigned char* rule_daddr=(unsigned char *)rule->rule_behaviour.dip;
 		unsigned char* target_daddr = (unsigned char*)&ip_header->daddr;
-		printk("check rule function:the rule addr:%x,the target daddr is %x",rule_daddr,target_daddr);
-		printk("the rule ip addr:%pI4",rule_daddr);
-		printk("the target ip addr:%pI4",target_daddr);
 		if(memcmp(rule_daddr,target_daddr,IP_LENGTH))return INIT_TARGET;
+		firewall_flog(&log_vector,INFO,"rule matching info:a packet with destination ip address %pI4 ",rule_daddr);
 	}
 
 	//protocal
 	printk("proto number %d",ip_header->protocol);
 	if(rule->rule_behaviour.proto==INIT_PROTO){
-		printk("proto not set");
 		//match continue
 	}
 	else{
@@ -246,10 +248,14 @@ target_t check_rule(struct sk_buff* skb,rule_ptr_t rule){
 		if(rule->rule_behaviour.proto==TCP&&ip_header->protocol!=6)return INIT_TARGET;
 		if(rule->rule_behaviour.proto==UDP&&ip_header->protocol!=17)return INIT_TARGET;
 		if(rule->rule_behaviour.proto==ICMP&&ip_header->protocol!=1)return INIT_TARGET;
+		firewall_flog(&log_vector,INFO,"rule matching info:a packet with protocal %s ",proto_table[rule->rule_behaviour.proto]);
+
 
 	}	
 
-	printk("check rule function: rule match");
+	if(rule->target == DROP) firewall_flog(&log_vector,ERROR,"rule match,the packet is going to be dropped");
+        if(rule->target == ACCEPT) firewall_flog(&log_vector,INFO,"rule match,the packet is going to be accepted");	
+
 	return rule->target;
 }
 /*declare entry and exit functions*/

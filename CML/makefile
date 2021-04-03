@@ -1,7 +1,7 @@
 SRC_FILES:=$(wildcard *.c)
 HEAD_FILES:=$(wildcard include/*.h)
 OBJ_FILES:=$(SRC_FILES:%.c=bin/%.o)
-FLAGS= -w -g
+FLAGS= -w -g 
 TARGET=firewall
 TARGET_PATH=/usr/sbin/
 main:${OBJ_FILES} 

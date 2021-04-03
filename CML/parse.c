@@ -14,7 +14,7 @@ cmd_ptr_t parse_cmd(int argc,char* argv[]){
 	//detect the no argument error
 	if(argc<2){
 		log_error_f("firewall:no argument provided.\n\
-			use --help for more information.");
+			use firewall help for more information.");
 		return NULL;
 	}
 
@@ -25,7 +25,6 @@ cmd_ptr_t parse_cmd(int argc,char* argv[]){
 		if(!strcmp(first_arg,name_id_tables[i].name)){
 			//set the command id
 			cmd_ptr->id=name_id_tables[i].id;
-			log_info_f("found the command:%s",name_id_tables[i].name);
 			break;
 		}
 	}
@@ -48,44 +47,34 @@ cmd_ptr_t parse_cmd(int argc,char* argv[]){
 	while((retval=getopt_long(argc,argv,"",optiontable,&opt_index))!=-1){
 		switch (retval){
 			case SIP:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_ip(optarg,cmd_ptr->table.sip);	
 				break;
 			case DIP:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_ip(optarg,cmd_ptr->table.dip);	
 				break;
 			case SPORT:
 				//
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_port(optarg,&(cmd_ptr->table.sport));
 				break;
 			case DPORT:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_port(optarg,&(cmd_ptr->table.dport));
 				break;
 			case PROTO:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_proto(optarg,&(cmd_ptr->table.proto));
 				break;
 			case SERVICE:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_service(optarg,&(cmd_ptr->table.service));
 				break;
 			case ALARM:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_alarm(optarg,&(cmd_ptr->table.alarm));
 				break;
 			case CHAIN:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_chain(optarg,&(cmd_ptr->table.chain_family));
 				break;
 			case TARGET:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_target(optarg,&(cmd_ptr->table.target));
 				break;
 			case CHAIN_INDEX:
-				log_info_f_tab(LEVEL_1,"--the option %s ",optiontable[retval].name);
 				parse_index(optarg,&(cmd_ptr->table.chain_index));
 				break;
 			case '?':
@@ -100,13 +89,6 @@ cmd_ptr_t parse_cmd(int argc,char* argv[]){
 		cmd_ptr->argument_fill_table[retval]=FILLED;
 	
 	}
-	
-	//traverse the argument table
-	#ifdef DEBUG
-	for(int i=0;i<ARGUMENT_COUNT;i++){
-		//log_info_f("%s is filled:%s",optiontable[i].name,(cmd_ptr->argument_fill_table[i])?("filled"):("not filled"));
-	}
-	#endif
 
 	//check if the arguments are valid,it will be regarded as a invalid command in the following cases
 	//	1):the command does not need the provided arguments
@@ -143,6 +125,35 @@ int check_option(cmd_ptr_t cmd_ptr){
 		}
 
 	}
+
+	//parse the service
+	
+	if(cmd_ptr->argument_fill_table[SERVICE]==FILLED){
+		log_info("service set");
+		int dport_redundant=0,proto_redundant=0;
+		if(cmd_ptr->argument_fill_table[DPORT]==FILLED){
+			dport_redundant = 1;
+			//but it is ok 
+		}
+		cmd_ptr->table.dport = service_info_table[cmd_ptr->table.service].port;
+		log_info_f("service port number：%d",cmd_ptr->table.dport);
+		cmd_ptr->argument_fill_table[DPORT] = FILLED;
+
+		if(cmd_ptr->argument_fill_table[PROTO]==FILLED){
+			proto_redundant = 1;
+			//but it is ok 
+		}
+
+		//print the redundant info
+
+		if(dport_redundant||proto_redundant)
+		log_error_f("since you have specified the service %s,%s  %s will be ignored",service_info_table[cmd_ptr->table.service].name,dport_redundant ?"dport":"",proto_redundant ? "protocol":"");
+
+		cmd_ptr->table.proto = service_info_table[cmd_ptr->table.service].proto;
+		cmd_ptr->argument_fill_table[PROTO] = FILLED;
+		log_info_f("service protocol number：%d",cmd_ptr->table.proto);
+	}	
+
 	#ifdef DEBUG
 	if(retval)log_debug_f_tab(LEVEL_0,"check option successs");
 	#endif

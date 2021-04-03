@@ -2,8 +2,10 @@
 #arguments input test
 TARGET=firewall
 $TARGET start
-$TARGET append  --sport 22  --target DROP --chain INCOME
-$TARGET list-rules
+$TARGET append --chain INCOME --service SSH --target DROP
+$TARGET list
+
+
 #./$TARGET policy --chain INCOME --target ACCEPT
 #./$TARGET list-rules
 

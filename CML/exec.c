@@ -1,7 +1,8 @@
 #include "include/exec.h"
 #include "include/debug.h"
-#define BUFFER_SIZE 1000
-#define LOG_BUFFER_SIZE 100000
+#include "include/help.h"
+#include "include/log.h"
+#include <stdlib.h>
 int exec(cmd_ptr_t cmd_ptr){
 	//open the proc file
 	int fd = open("/proc/firewall",O_RDWR);
@@ -27,13 +28,30 @@ int exec(cmd_ptr_t cmd_ptr){
 	else if(cmd_ptr->id==FILTER_LOG){
 		//check the conf file if exists
 		int fd = open("/proc/firewall_log",O_RDONLY);
-		char tmp_buf[LOG_BUFFER_SIZE];
+		log_vector_t log_vector;
 		if(fd == -1){
 			log_error("can not access the /proc/firewall_log");
 			return -1;
 		}
-		if(read(fd,tmp_buf,LOG_BUFFER_SIZE)){
-			log_info(tmp_buf);
+		if(read(fd,&log_vector,sizeof(log_vector_t))){
+			int i;
+			for(i = log_vector.start;i <log_vector.start + log_vector.valid_size;i++){
+				int j = i%VECTOR_SIZE;
+				switch(log_vector.buffer[j].log_level){
+					case INFO:
+						log_info_f("#%d\t INFO \t %s \t %s",i-log_vector.start,log_vector.buffer[j].time_str,log_vector.buffer[j].content);
+						break;
+					case DEBU:
+						log_debug_f("#%d\t INFO \t %s \t %s",i-log_vector.start,log_vector.buffer[j].time_str,log_vector.buffer[j].content);
+						break;
+					case ERROR:
+						log_error_f("#%d\t INFO \t %s \t %s",i-log_vector.start,log_vector.buffer[j].time_str,log_vector.buffer[j].content);
+						break;
+					default:
+						log_error("an error while processing the firewall log");
+				}
+			}
+				
 		}
 	}
 	else if(cmd_ptr->id==STATUS_CHECK){
@@ -48,6 +66,10 @@ int exec(cmd_ptr_t cmd_ptr){
 			log_info("firewall enable status:enabled");
 		}
 		else log_info("firewall enable status:disabled");
+	}
+	else if(cmd_ptr->id == HELP){
+		print_manual();
+		return 0;
 	}
 
 	//get the buffer response
@@ -88,3 +110,6 @@ void disable_firewall(){
 	close(fd);
 	log_info_f("disable the firewall success");
 }
+
+//print log info
+
