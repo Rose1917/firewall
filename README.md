@@ -67,6 +67,7 @@
 
 #### 4. Screenshots
 * Install
+	<img src="./screenshots/install.png">
 	!.[.].(screenshots/install.png)
 * Start and Check
 	!.[.].(screenshots/start.png)
