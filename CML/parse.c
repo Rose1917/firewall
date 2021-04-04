@@ -197,7 +197,6 @@ void parse_ip(char* s,ip_addr ip){
 	}
 
 	//check
-	log_info_f_tab(LEVEL_2,"parse ip result:%u.%u.%u.%u",ip[0],ip[1],ip[2],ip[3]);
 }
 void parse_port(char* s,port_t* p){
 	long long tmp_port;
@@ -214,7 +213,6 @@ void parse_port(char* s,port_t* p){
 
 	//set the port value
 	*p=tmp_port;
-	log_info_f_tab(LEVEL_2,"parse port result:%d",*p);
 	
 }
 void parse_proto(char* s,proto_t* p){
@@ -233,7 +231,6 @@ void parse_proto(char* s,proto_t* p){
 	}
 
 	//log the result
-	log_info_f_tab(LEVEL_2,"parse protocal info :%s",s);
 }
 
 void parse_service(char* s,service_t* p){
@@ -252,7 +249,6 @@ void parse_service(char* s,service_t* p){
 	}
 	
 	//log the result
-	log_info_f_tab(LEVEL_2,"parse service info:%s",s);
 }
 
 void parse_alarm(char* s,alarm_switch_t* alarm){
@@ -271,7 +267,6 @@ void parse_alarm(char* s,alarm_switch_t* alarm){
 	}
 	
 	//log the result
-	log_info_f_tab(LEVEL_2,"parse alarm info %s",s);
 }
 	
 void parse_chain(char* s,chain_family_t* family){
@@ -290,7 +285,6 @@ void parse_chain(char* s,chain_family_t* family){
 	}
 	
 	//log the result
-	log_info_f_tab(LEVEL_2,"parse chain info %s",s);
 }
 
 void parse_target(char* s,target_t* target){
@@ -309,7 +303,6 @@ void parse_target(char* s,target_t* target){
 	}
 	
 	//log the result
-	log_info_f_tab(LEVEL_2,"parse target info %s",s);
 }
 void parse_index(char* s,index_t* index){
 	long long tmp_index;
@@ -326,6 +319,5 @@ void parse_index(char* s,index_t* index){
 
 	//set the port value
 	*index=tmp_index;
-	log_info_f_tab(LEVEL_2,"parse index result:%d",*index);
 	
 }
