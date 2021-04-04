@@ -68,12 +68,11 @@
 #### 4. Screenshots
 * Install
 	<img src="./screenshots/install.png">
-	!.[.].(screenshots/install.png)
 * Start and Check
-	!.[.].(screenshots/start.png)
+	<img src="./screenshots/start.png">
 * Config and Test
-	!.[.].(screenshots/use.png)
+	<img src="./screenshots/use.png">
 * Log
-	!.[.].(screenshots/log.png)
+	<img src="./screenshots/log.png">
 * Help page
-	!.[.].(screenshots/help.png)
+	<img src="./screenshots/help.png">
