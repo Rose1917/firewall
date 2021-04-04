@@ -67,12 +67,12 @@
 
 #### 4. Screenshots
 * Install
-	!.[.](screenshots/install.png)
+	!.[.].(screenshots/install.png)
 * Start and Check
-	!.[.](screenshots/start.png)
+	!.[.].(screenshots/start.png)
 * Config and Test
-	!.[.](screenshots/use.png)
+	!.[.].(screenshots/use.png)
 * Log
-	!.[.](screenshots/log.png)
+	!.[.].(screenshots/log.png)
 * Help page
-	!.[.](screenshots/help.png)
+	!.[.].(screenshots/help.png)
