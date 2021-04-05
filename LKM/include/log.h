@@ -48,10 +48,18 @@ ssize_t log_read(struct file *file,char __user *ubuf,size_t count,loff_t *ppos);
 ssize_t log_write(struct file *file,const char __user *ubuf,size_t count,loff_t *ppos);//a fake function
 
 //prepare the myops structure
+//file_operation is deprecated since 5.6 or so.We still keep it for compatibility
 static struct file_operations myops_1={
 		.owner = THIS_MODULE,
 		.read = log_read,
 		.write = log_write,
+};
+
+static struct proc_ops  mypops_1={
+	.proc_release = single_release,
+	.proc_read = log_read,
+	.proc_lseek = seq_lseek,
+	.proc_write = log_write,
 };
 
 

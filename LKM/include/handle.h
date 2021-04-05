@@ -65,11 +65,19 @@ static name_id_map name_id_tables[]={
 ssize_t handle_read(struct file *file,char __user *ubuf,size_t count,loff_t *ppos);
 ssize_t handle_write(struct file *file,const char __user *ubuf,size_t count,loff_t *ppos);
 //prepare the myops structure
+/*file operation is deprecated since Kernel 5.6 or so. But we still leave it here for compatibility*/
 static struct file_operations myops={
 		.owner = THIS_MODULE,
 		.read = handle_read,
 		.write = handle_write,
 	};
+//prepare the proc_op
+static struct proc_ops my_pops={
+	.proc_read = handle_read,
+	.proc_write = handle_write,
+};
+
+
 void print_cmd_info(void);
 void set_rule_by_cmd(rule_ptr_t rule_ptr,cmd_ptr_t cmd_ptr,chain_family_t* chain,index_t *index);
 #endif

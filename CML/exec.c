@@ -53,10 +53,11 @@ int exec(cmd_ptr_t cmd_ptr){
 			}
 				
 		}
+		return 0;
 	}
 	else if(cmd_ptr->id==STATUS_CHECK){
 		//check the conf file if exists
-		int fd = open("/etc/modules-load.d/firewall.conf",O_RDONLY);
+		int fd = open("/etc/modules-load.d/firewall.conf",O_RDONLY|O_CREAT);
 		char tmp_buf[BUFFER_SIZE];
 		if(fd == -1){
 			log_error("can not access the /etc/modules-load.d/firewall.conf");

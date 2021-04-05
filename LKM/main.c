@@ -167,18 +167,21 @@ void unregister_hookfunctions(){
 	nf_unregister_net_hook(&init_net,&forward_filter);
 }
 void init_proc(void){
-	//create the proc virtual files
-	proc_entry=proc_create("firewall",0660,NULL,&myops);
-	if(proc_entry == NULL){
-		printk(KERN_INFO "an error occurred while creating the proc directory");
-		return 1;
-	}
 
-	log_proc_entry=proc_create("firewall_log",0660,NULL,&myops_1);
-	if(log_proc_entry == NULL){
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,6,0)
+	printk("old version");
+	proc_entry=proc_create("firewall",0660,NULL,&myops);
+	log_proc_entry=proc_create("firewall_log",0644,NULL,&myops_1);
+#else 
+	printk("newer version");
+	proc_entry=proc_create("firewall",0660,NULL,&my_pops);
+	log_proc_entry=proc_create("firewall_log",0644,NULL,&mypops_1);
+#endif
+	if(proc_entry == NULL){
 		printk(KERN_INFO "an error occurred while creating the log proc file");
 		return 1;
 	}
+	printk(KERN_INFO "proc inited succesfully");
 	
 }
 target_t check_rule(struct sk_buff* skb,rule_ptr_t rule){
