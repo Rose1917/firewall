@@ -72,11 +72,12 @@ static struct file_operations myops={
 		.write = handle_write,
 	};
 //prepare the proc_op
+#ifdef PROC_OP
 static struct proc_ops my_pops={
 	.proc_read = handle_read,
 	.proc_write = handle_write,
 };
-
+#endif
 
 void print_cmd_info(void);
 void set_rule_by_cmd(rule_ptr_t rule_ptr,cmd_ptr_t cmd_ptr,chain_family_t* chain,index_t *index);
