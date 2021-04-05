@@ -56,9 +56,7 @@ static struct file_operations myops_1={
 };
 
 static struct proc_ops  mypops_1={
-	.proc_release = single_release,
 	.proc_read = log_read,
-	.proc_lseek = seq_lseek,
 	.proc_write = log_write,
 };
 

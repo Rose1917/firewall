@@ -41,7 +41,7 @@ ssize_t handle_write(struct file *file,const char __user *ubuf,size_t count,loff
 	raw_copy_from_user(&cmd,ubuf,count);
 	printk(KERN_DEBUG "received the user space command\n");
 
-	print_cmd_info();
+//	print_cmd_info();
 	
 	//map the command to handler
 	memset(to_read_buffer,'\0',sizeof(to_read_buffer));	//clean the read buffer
@@ -281,6 +281,10 @@ HANDLE_FUNCTION(list_rules){
 	}
 }
 
+HANDLE_FUNCTION(help){
+	//do nothing and return
+	return ;
+}
 
 
 //some utility functions

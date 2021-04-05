@@ -32,7 +32,7 @@ HANDLE_FUNCTION(policy);
 HANDLE_FUNCTION(list_rules);
 HANDLE_FUNCTION(status);
 HANDLE_FUNCTION(log);
-
+HANDLE_FUNCTION(help);
 
 
 typedef struct name_id_map{
@@ -58,7 +58,8 @@ static name_id_map name_id_tables[]={
 	{"policy",SET_CHAIN_POLICY,HANDLE_FUNCTION_NAME(policy)},
 	{"list-rules",LIST_RULE,HANDLE_FUNCTION_NAME(list_rules)},
 	{"status",STATUS_CHECK,HANDLE_FUNCTION_NAME(status)},
-	{"log",FILTER_LOG,HANDLE_FUNCTION_NAME(log)}
+	{"log",FILTER_LOG,HANDLE_FUNCTION_NAME(log)},
+	{"help",HELP,HANDLE_FUNCTION_NAME(help)}
 };
 
 //declaration of the handle functions

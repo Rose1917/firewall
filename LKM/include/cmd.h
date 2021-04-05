@@ -40,7 +40,10 @@ typedef enum command_id{
 	//info operations
 	LIST_RULE,//list all the rules
 	STATUS_CHECK,//if activated
-	FILTER_LOG//show the filter log
+	FILTER_LOG,//show the filter log
+	
+	//other operations
+	HELP
 }command_id;
 
 //all the argument possibilities

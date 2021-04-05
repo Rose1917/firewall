@@ -53,6 +53,7 @@ int exec(cmd_ptr_t cmd_ptr){
 			}
 				
 		}
+		close(fd);
 		return 0;
 	}
 	else if(cmd_ptr->id==STATUS_CHECK){

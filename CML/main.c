@@ -13,6 +13,5 @@ int main(int argc,char* argv[]){
 	if(cmd_ptr!=NULL)
 		exec(cmd_ptr);
 
-
 	return 0;
 }
