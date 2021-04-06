@@ -173,6 +173,7 @@ void init_proc(void){
 	proc_entry=proc_create("firewall",0660,NULL,&myops);
 	log_proc_entry=proc_create("firewall_log",0644,NULL,&myops_1);
 #else 
+#define PROC_OP
 	printk("newer version");
 	proc_entry=proc_create("firewall",0660,NULL,&my_pops);
 	log_proc_entry=proc_create("firewall_log",0644,NULL,&mypops_1);

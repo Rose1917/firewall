@@ -54,11 +54,12 @@ static struct file_operations myops_1={
 		.read = log_read,
 		.write = log_write,
 };
-
+#ifdef PROC_OP
 static struct proc_ops  mypops_1={
 	.proc_read = log_read,
 	.proc_write = log_write,
 };
+#endif
 
 
 void clean_log_buffer(void);
