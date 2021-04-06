@@ -3,6 +3,7 @@
 
 #include <linux/kernel.h>
 #include <linux/module.h>
+#include <linux/version.h>
 #include <linux/init.h>
 #include <linux/proc_fs.h>
 #include <linux/moduleparam.h>
@@ -49,12 +50,13 @@ ssize_t log_write(struct file *file,const char __user *ubuf,size_t count,loff_t 
 
 //prepare the myops structure
 //file_operation is deprecated since 5.6 or so.We still keep it for compatibility
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,6,0)
 static struct file_operations myops_1={
 		.owner = THIS_MODULE,
 		.read = log_read,
 		.write = log_write,
 };
-#ifdef PROC_OP
+#else
 static struct proc_ops  mypops_1={
 	.proc_read = log_read,
 	.proc_write = log_write,

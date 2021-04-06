@@ -9,6 +9,8 @@ all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+oldconfig:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) oldconfig
 install:
 	sudo insmod $(TARGET_NAME).ko
 remove:

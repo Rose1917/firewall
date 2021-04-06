@@ -67,13 +67,14 @@ ssize_t handle_read(struct file *file,char __user *ubuf,size_t count,loff_t *ppo
 ssize_t handle_write(struct file *file,const char __user *ubuf,size_t count,loff_t *ppos);
 //prepare the myops structure
 /*file operation is deprecated since Kernel 5.6 or so. But we still leave it here for compatibility*/
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,6,0)
 static struct file_operations myops={
 		.owner = THIS_MODULE,
 		.read = handle_read,
 		.write = handle_write,
 	};
+#else
 //prepare the proc_op
-#ifdef PROC_OP
 static struct proc_ops my_pops={
 	.proc_read = handle_read,
 	.proc_write = handle_write,
