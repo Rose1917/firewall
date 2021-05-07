@@ -53,7 +53,7 @@
   firewall list
   
   #to insert a rule
-  firewall append --chain INPUT --sip 192.168.1.112 --target DROP
+  firewall append --chain INCOME --sip 192.168.1.112 --target DROP
   
   #to see the log
   firewall log
